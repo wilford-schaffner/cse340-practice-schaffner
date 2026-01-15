@@ -1,0 +1,20 @@
+{
+  "name": "cse340-practice-schaffner",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.0",
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
