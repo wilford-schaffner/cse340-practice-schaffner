@@ -37,7 +37,6 @@ const addLocalVariables = (req, res, next) => {
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     res.locals.bodyClass = randomTheme;
 
-    // Continue to the next middleware or route handler
     next();
 };
 
