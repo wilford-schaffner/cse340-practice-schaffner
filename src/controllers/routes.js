@@ -3,6 +3,18 @@ import { Router } from 'express';
 // Create a new router instance
 const router = Router();
 
+// Add catalog-specific styles to all catalog routes
+router.use('/catalog', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/catalog.css">');
+    next();
+});
+
+// Add faculty-specific styles to all faculty routes
+router.use('/faculty', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/faculty.css">');
+    next();
+});
+
 // Import controllers and middleware
 import { addDemoHeaders } from '../middleware/demo/headers.js';
 import { catalogPage, courseDetailPage } from './catalog/catalog.js';
