@@ -31,16 +31,32 @@ const setupDatabase = async () => {
     
     if (hasData) {
         console.log('Database already seeded');
+        // Still ensure practice tables exist (e.g. contact_form) so assignments work
+        const practicePath = join(__dirname, 'sql', 'practice.sql');
+        if (fs.existsSync(practicePath)) {
+            const practiceSQL = fs.readFileSync(practicePath, 'utf8');
+            await db.query(practiceSQL);
+            console.log('Practice database tables initialized');
+        }
         return true;
     }
-    
+
     // No faculty found - run full seed
     console.log('Seeding database...');
     const seedPath = join(__dirname, 'sql', 'seed.sql');
     const seedSQL = fs.readFileSync(seedPath, 'utf8');
     await db.query(seedSQL);
+
+    // Run practice.sql if it exists (for student assignments)
+    const practicePath = join(__dirname, 'sql', 'practice.sql');
+    if (fs.existsSync(practicePath)) {
+        const practiceSQL = fs.readFileSync(practicePath, 'utf8');
+        await db.query(practiceSQL);
+        console.log('Practice database tables initialized');
+    }
+
     console.log('Database seeded successfully');
-    
+
     return true;
 };
 
