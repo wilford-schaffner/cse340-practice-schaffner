@@ -4,7 +4,9 @@ const facultyListPage = async (req, res) => {
     const validSortOptions = ['name', 'department', 'title'];
     const sortBy = validSortOptions.includes(req.query.sort) ? req.query.sort : 'department';
     const facultyList = await getSortedFaculty(sortBy);
-    
+
+    res.addStyle('<link rel="stylesheet" href="/css/faculty.css">');
+
     res.render('faculty/list', {
         title: 'Faculty Directory',
         faculty: facultyList,
@@ -21,7 +23,9 @@ const facultyDetailPage = async (req, res, next) => {
         err.status = 404;
         return next(err);
     }
-    
+
+    res.addStyle('<link rel="stylesheet" href="/css/faculty.css">');
+
     res.render('faculty/detail', {
         title: `${facultyMember.name} - Faculty Profile`,
         faculty: facultyMember

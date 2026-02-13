@@ -22,19 +22,19 @@ const setHeadAssetsFunctionality = (res) => {
         res.locals.scripts.push({ content: js, priority });
     };
     
-    // These functions will be available in EJS templates
+    // These functions will be available in EJS templates (read from res.locals at call time)
     res.locals.renderStyles = () => {
-        return res.locals.styles
-            // Sort by priority: higher numbers load first
-            .sort((a, b) => b.priority - a.priority)
+        const styles = res.locals.styles || [];
+        return styles
+            .sort((a, b) => (b.priority || 0) - (a.priority || 0))
             .map(item => item.content)
             .join('\n');
     };
-    
+
     res.locals.renderScripts = () => {
-        return res.locals.scripts
-            // Sort by priority: higher numbers load first
-            .sort((a, b) => b.priority - a.priority)
+        const scripts = res.locals.scripts || [];
+        return scripts
+            .sort((a, b) => (b.priority || 0) - (a.priority || 0))
             .map(item => item.content)
             .join('\n');
     };
