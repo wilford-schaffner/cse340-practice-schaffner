@@ -47,36 +47,33 @@ const showRegistrationForm = (req, res) => {
  * Handle user registration with validation and password hashing.
  */
 const processRegistration = async (req, res) => {
-    // Check for validation errors
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        console.error('Validation errors:', errors.array());
+        errors.array().forEach(error => {
+            req.flash('error', error.msg);
+        });
         return res.redirect('/register');
     }
 
-    // Extract validated data from request body
     const { name, email, password } = req.body;
 
     try {
-        // Check if email already exists in database
         const exists = await emailExists(email);
 
         if (exists) {
-            console.log('Email already registered');
+            req.flash('warning', 'An account with that email already exists.');
             return res.redirect('/register');
         }
 
-        // Hash the password before saving to database
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Save user to database with hashed password
         await saveUser(name, email, hashedPassword);
 
-        console.log('User registered successfully');
-        res.redirect('/register/list');
+        req.flash('success', 'Registration successful. Please log in.');
+        res.redirect('/login');
     } catch (error) {
         console.error('Error during registration:', error);
+        req.flash('error', 'Unable to complete registration. Please try again later.');
         res.redirect('/register');
     }
 };
