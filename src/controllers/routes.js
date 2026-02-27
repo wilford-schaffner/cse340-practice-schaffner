@@ -42,13 +42,25 @@ router.use('/dashboard', (req, res, next) => {
 // Import controllers and middleware
 import { addDemoHeaders } from '../middleware/demo/headers.js';
 import { catalogPage, courseDetailPage } from './catalog/catalog.js';
-import contactRoutes from './forms/contact.js';
-import loginRoutes from './forms/login.js';
-import { processLogout, showDashboard } from './forms/login.js';
-import { requireLogin } from '../middleware/auth.js';
-import registrationRoutes from './forms/registration.js';
+import { showContactForm, handleContactSubmission, showContactResponses } from './forms/contact.js';
+import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
+import {
+    showRegistrationForm,
+    processRegistration,
+    showAllUsers,
+    showEditAccountForm,
+    processEditAccount,
+    processDeleteAccount
+} from './forms/registration.js';
 import { facultyListPage, facultyDetailPage } from './faculty/faculty.js';
 import { homePage, aboutPage, demoPage, testErrorPage } from './index.js';
+import { requireLogin } from '../middleware/auth.js';
+import {
+    contactValidation,
+    registrationValidation,
+    loginValidation,
+    updateAccountValidation
+} from '../middleware/validation/forms.js';
 
 // Home and basic pages
 router.get('/', homePage);
@@ -63,10 +75,17 @@ router.get('/faculty', facultyStyles, facultyListPage);
 router.get('/faculty/:facultySlug', facultyStyles, facultyDetailPage);
 
 // Contact form routes
-router.use('/contact', contactRoutes);
+router.get('/contact', showContactForm);
+router.post('/contact', contactValidation, handleContactSubmission);
+router.get('/contact/responses', showContactResponses);
 
 // Registration routes
-router.use('/register', registrationRoutes);
+router.get('/register', showRegistrationForm);
+router.post('/register', registrationValidation, processRegistration);
+router.get('/register/list', showAllUsers);
+router.get('/register/:id/edit', requireLogin, showEditAccountForm);
+router.post('/register/:id/edit', requireLogin, updateAccountValidation, processEditAccount);
+router.post('/register/:id/delete', requireLogin, processDeleteAccount);
 
 // Demo page with special middleware
 router.get('/demo', addDemoHeaders, demoPage);
@@ -75,7 +94,8 @@ router.get('/demo', addDemoHeaders, demoPage);
 router.get('/test-error', testErrorPage);
 
 // Login routes (form and submission)
-router.use('/login', loginRoutes);
+router.get('/login', showLoginForm);
+router.post('/login', loginValidation, processLogin);
 
 // Authentication-related routes at root level
 router.get('/logout', processLogout);

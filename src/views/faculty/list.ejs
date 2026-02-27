@@ -15,9 +15,18 @@
 
     <div class="course-list">
         <% faculty.forEach(member => { %>
-            <div class="course-card">
-                <h3><a href="/faculty/<%= member.slug %>"><%= member.name %></a></h3>
-                <p class="course-id"><%= member.department %> • <%= member.title %></p>
+            <div class="course-card faculty-card">
+                <div class="faculty-card-media">
+                    <img
+                        class="faculty-photo"
+                        src="/images/faculty/<%= member.slug %>.jpg"
+                        alt="<%= member.name %>"
+                    >
+                </div>
+                <div class="faculty-card-content">
+                    <h3><a href="/faculty/<%= member.slug %>"><%= member.name %></a></h3>
+                    <p class="course-id"><%= member.department %> • <%= member.title %></p>
+                </div>
             </div>
         <% }); %>
     </div>
